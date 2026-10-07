@@ -1,0 +1,16 @@
+// Editor preview: the front-end script does not run in the canvas, so mirror its first state.
+.wp-block-releaso-changelog {
+	.releaso__bar {
+		position: static;
+	}
+
+	// Only the first releases, as visitors first see them.
+	.releaso__release.is-older {
+		display: none;
+	}
+
+	// Every product panel prints; show the first one, like the selected tab.
+	.releaso__panel + .releaso__panel {
+		display: none;
+	}
+}

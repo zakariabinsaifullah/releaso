@@ -1,0 +1,8 @@
+node_modules/
+vendor/
+.phpunit.result.cache
+*.zip
+.DS_Store
+
+# Old "Changelog Showcase" sample, kept locally for reference only.
+legacy-ref/

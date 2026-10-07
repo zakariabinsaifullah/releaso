@@ -1,0 +1,32 @@
+{
+	"name": "releaso",
+	"version": "1.0.0",
+	"description": "Beautiful, filterable changelogs for WordPress plugins.",
+	"private": true,
+	"license": "GPL-2.0-or-later",
+	"author": "Gutenbergkits",
+	"scripts": {
+		"build": "wp-scripts build --webpack-src-dir=src --output-path=build",
+		"start": "wp-scripts start --webpack-src-dir=src --output-path=build",
+		"lint:js": "wp-scripts lint-js src assets/js",
+		"lint:css": "wp-scripts lint-style \"src/**/*.scss\" \"assets/css/*.css\"",
+		"format": "wp-scripts format src assets/js",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"make-pot": "wp i18n make-pot . languages/releaso.pot --exclude=node_modules,vendor,src,tests,legacy-ref"
+	},
+	"files": [
+		"releaso.php",
+		"uninstall.php",
+		"readme.txt",
+		"includes",
+		"templates",
+		"assets",
+		"build",
+		"languages"
+	],
+	"devDependencies": {
+		"@wordpress/icons": "^17.0.0",
+		"@wordpress/scripts": "^36.0.0"
+	},
+	"dependencies": {}
+}

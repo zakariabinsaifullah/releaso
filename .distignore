@@ -1,0 +1,16 @@
+.git
+.gitignore
+.distignore
+node_modules
+vendor
+src
+tests
+legacy-ref
+composer.json
+composer.lock
+package.json
+package-lock.json
+phpcs.xml.dist
+phpunit.xml.dist
+README.md
+.phpunit.result.cache

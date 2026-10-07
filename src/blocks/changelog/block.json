@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "releaso/changelog",
+	"version": "1.0.0",
+	"title": "Changelog",
+	"category": "widgets",
+	"icon": "megaphone",
+	"description": "Your products' release notes as a filterable timeline, from WordPress.org, GitHub, readme files or releases you write.",
+	"keywords": [ "changelog", "release notes", "releases", "versions", "updates", "releaso" ],
+	"textdomain": "releaso",
+	"attributes": {
+		"products": { "type": "array", "items": { "type": "string" }, "default": [] },
+		"layout": { "type": "string", "default": "" },
+		"perPage": { "type": "number", "default": 0 },
+		"limit": { "type": "number", "default": 0 },
+		"types": { "type": "array", "items": { "type": "string" }, "default": [] },
+		"showFilters": { "type": "boolean", "default": true },
+		"showSearch": { "type": "boolean", "default": true },
+		"showHeader": { "type": "boolean", "default": true },
+		"expanded": { "type": "boolean", "default": false },
+		"colors": { "type": "object", "default": {} },
+		"typeColors": { "type": "object", "default": {} }
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"anchor": true,
+		"spacing": { "margin": true, "padding": true },
+		"color": { "background": true, "text": true },
+		"typography": { "fontSize": true }
+	},
+	"example": {
+		"attributes": { "perPage": 2 }
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "releaso"
+}
