@@ -1,5 +1,5 @@
 === Releaso – Changelogs & Release Notes ===
-Contributors: gutenbergkits
+Contributors: binsaifullah
 Tags: changelog, release notes, readme, github releases, block
 Requires at least: 6.5
 Tested up to: 7.1
