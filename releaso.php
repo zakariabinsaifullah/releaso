@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Releaso
+ * Plugin Name:       Releaso – Changelogs & Release Notes
  * Plugin URI:        https://gutenbergkits.com/releaso
  * Description:       Beautiful, filterable changelogs for your plugins. Pulls release notes from WordPress.org, installed plugins, GitHub or any readme.txt / CHANGELOG.md / JSON URL, and lets you write, paste or import releases. Shown with the Releaso block or the [releaso] shortcode.
  * Version:           1.0.0
@@ -11,7 +11,6 @@
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       releaso
- * Domain Path:       /languages
  *
  * @package Releaso
  */

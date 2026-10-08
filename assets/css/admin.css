@@ -1,8 +1,10 @@
 /**
- * Releaso admin: header, list screens, product and release editors, import / export and settings.
+ * Releaso admin: header, list screens, product and release editors,
+ * import / export and settings.
  *
- * Everything is scoped to body.releaso-screen (see Admin::body_class()) so other admin screens
- * are left alone. Change type colours arrive as --c through an inline style (Admin::type_css()).
+ * Everything is scoped to body.releaso-screen (see Admin::body_class()) so
+ * other admin screens are left alone. Change type colours arrive as --c
+ * through an inline style (Admin::type_css()).
  */
 
 .releaso-screen {
@@ -55,7 +57,7 @@
 	line-height: 1.25;
 }
 
-/* header bar ----------------------------------------------------------------------------------- */
+/* header bar --------------------------------------------------------------- */
 
 .releaso-header {
 	position: sticky;
@@ -212,6 +214,7 @@
 }
 
 @media (max-width: 782px) {
+
 	.releaso-header {
 		top: 46px;
 		flex-wrap: wrap;
@@ -232,12 +235,13 @@
 }
 
 @media (max-width: 600px) {
+
 	.releaso-header {
 		position: static;
 	}
 }
 
-/* page head ------------------------------------------------------------------------------------ */
+/* page head ---------------------------------------------------------------- */
 
 .releaso-page-head {
 	margin-bottom: 20px;
@@ -255,7 +259,7 @@
 	font-size: 14px;
 }
 
-/* buttons and controls ------------------------------------------------------------------------- */
+/* buttons and controls ----------------------------------------------------- */
 
 .releaso-screen #wpbody-content .button,
 .releaso-screen .page-title-action {
@@ -309,7 +313,10 @@
 	color: #fff;
 }
 
-/* core gives button icons line-height: 1.9, which drops them below the label in a flex button */
+/*
+ * Core gives button icons line-height: 1.9, which drops them below the label
+ * in a flex button.
+ */
 .releaso-screen #wpbody-content .button .dashicons {
 	flex: 0 0 auto;
 	width: 16px;
@@ -388,7 +395,10 @@
 	font-size: 12px;
 }
 
-/* checked radios and checkboxes use the brand colour instead of the admin colour scheme */
+/*
+ * Checked radios and checkboxes use the brand colour instead of the admin
+ * colour scheme.
+ */
 .releaso-screen #wpbody-content input[type="radio"]:checked,
 .releaso-screen #wpbody-content input[type="checkbox"]:checked {
 	border-color: var(--rl-accent);
@@ -446,7 +456,9 @@
 	font-size: 13px;
 }
 
-/* toggle switch: <label.releaso-toggle><input checkbox><span.track><span.label> */
+/*
+ * toggle switch: <label.releaso-toggle><input checkbox><span.track><span.label>
+ */
 
 .releaso-toggle {
 	position: relative;
@@ -519,7 +531,7 @@
 	border: 0;
 }
 
-/* cards ---------------------------------------------------------------------------------------- */
+/* cards -------------------------------------------------------------------- */
 
 .releaso-card {
 	padding: 22px 24px;
@@ -582,7 +594,7 @@
 	vertical-align: 2px;
 }
 
-/* notices -------------------------------------------------------------------------------------- */
+/* notices ------------------------------------------------------------------ */
 
 .releaso-screen #wpbody-content .notice {
 	border: 1px solid var(--rl-line);
@@ -607,7 +619,7 @@
 	border-left-color: var(--rl-accent);
 }
 
-/* list screens --------------------------------------------------------------------------------- */
+/* list screens ------------------------------------------------------------- */
 
 .releaso-screen .subsubsub {
 	margin-bottom: 10px;
@@ -797,7 +809,7 @@
 	cursor: help;
 }
 
-/* edit screens (metaboxes) --------------------------------------------------------------------- */
+/* edit screens (metaboxes) ------------------------------------------------- */
 
 .releaso-screen #poststuff .postbox {
 	overflow: hidden;
@@ -851,7 +863,7 @@
 	padding-bottom: 8px;
 }
 
-/* fields --------------------------------------------------------------------------------------- */
+/* fields ------------------------------------------------------------------- */
 
 .releaso-field {
 	margin: 0 0 18px;
@@ -883,6 +895,15 @@
 	align-items: center;
 	gap: 10px;
 	margin: 0 0 8px;
+}
+
+.releaso-field__error {
+	color: var(--rl-error);
+	font-weight: 500;
+}
+
+.releaso-field__error:empty {
+	display: none;
 }
 
 .releaso-required {
@@ -921,7 +942,7 @@
 	min-width: 0;
 }
 
-/* product source ------------------------------------------------------------------------------- */
+/* product source ----------------------------------------------------------- */
 
 .releaso-source__choices {
 	display: grid;
@@ -1023,13 +1044,14 @@
 }
 
 @keyframes releaso-fade-in {
+
 	from {
 		opacity: 0;
 		transform: translateY(-4px);
 	}
 }
 
-/* status box ----------------------------------------------------------------------------------- */
+/* status box --------------------------------------------------------------- */
 
 .releaso-status {
 	position: relative;
@@ -1135,12 +1157,13 @@
 }
 
 @keyframes releaso-spin {
+
 	to {
 		transform: rotate(360deg);
 	}
 }
 
-/* release editor ------------------------------------------------------------------------------- */
+/* release editor ----------------------------------------------------------- */
 
 .releaso-admin__grid {
 	display: grid;
@@ -1149,6 +1172,7 @@
 }
 
 @media (max-width: 782px) {
+
 	.releaso-admin__grid {
 		grid-template-columns: 1fr;
 	}
@@ -1295,7 +1319,7 @@
 	color: var(--rl-muted);
 }
 
-/* import / export ------------------------------------------------------------------------------ */
+/* import / export ---------------------------------------------------------- */
 
 .releaso-tools {
 	display: grid;
@@ -1323,6 +1347,7 @@
 }
 
 @media (min-width: 1100px) {
+
 	.releaso-tools {
 		grid-template-columns: minmax(0, 2fr) minmax(340px, 1fr);
 	}
@@ -1348,6 +1373,7 @@
 }
 
 @media (min-width: 1800px) {
+
 	.releaso-tools {
 		grid-template-columns: minmax(0, 2.4fr) minmax(380px, 1fr);
 	}
@@ -1460,7 +1486,7 @@
 	text-transform: uppercase;
 }
 
-/* settings ------------------------------------------------------------------------------------- */
+/* settings ----------------------------------------------------------------- */
 
 /* three columns on wide screens: section menu, settings, preview */
 
@@ -1482,6 +1508,7 @@
 }
 
 @media (min-width: 1280px) {
+
 	.releaso-settings-layout {
 		grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
 	}
@@ -1494,6 +1521,7 @@
 }
 
 @media (min-width: 1600px) {
+
 	.releaso-settings-layout {
 		grid-template-columns: 200px minmax(0, 1fr) minmax(340px, 420px);
 		gap: 32px;
@@ -1746,6 +1774,7 @@
 
 /* very wide: control and its help text side by side */
 @media (min-width: 1600px) {
+
 	.releaso-settings .form-table th {
 		width: 240px;
 	}
@@ -1869,6 +1898,7 @@
 }
 
 @media (max-width: 782px) {
+
 	.releaso-settings .form-table th,
 	.releaso-settings .form-table td {
 		display: block;
@@ -1890,6 +1920,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.releaso-screen *,
 	.releaso-screen *::before,
 	.releaso-screen *::after {
@@ -1898,7 +1929,7 @@
 	}
 }
 
-/* change types editor (Settings) -------------------------------------------------------------- */
+/* change types editor (Settings) ------------------------------------------- */
 
 .releaso-types {
 	padding: 8px 24px 22px;
@@ -2028,6 +2059,7 @@
 }
 
 @media (max-width: 1100px) {
+
 	.releaso-type {
 		grid-template-columns: 40px minmax(0, 1fr) auto;
 		gap: 10px 14px;
@@ -2044,6 +2076,7 @@
 }
 
 @media (max-width: 782px) {
+
 	.releaso-types {
 		padding: 4px 20px 18px;
 	}

@@ -63,12 +63,12 @@ class Settings {
 	 * One setting.
 	 *
 	 * @param string $key     Key.
-	 * @param mixed  $default Fallback when unknown.
+	 * @param mixed  $fallback Fallback when unknown.
 	 * @return mixed
 	 */
-	public function get( $key, $default = null ) {
+	public function get( $key, $fallback = null ) {
 		$all = $this->all();
-		return array_key_exists( $key, $all ) ? $all[ $key ] : $default;
+		return array_key_exists( $key, $all ) ? $all[ $key ] : $fallback;
 	}
 
 	/**

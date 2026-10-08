@@ -70,13 +70,13 @@ class Lifecycle {
 	/**
 	 * Any status change of a release or product (publish, schedule firing, trash, restore).
 	 *
-	 * @param string  $new  New status.
-	 * @param string  $old  Old status.
-	 * @param WP_Post $post Post.
+	 * @param string  $new_status New status.
+	 * @param string  $old_status Old status.
+	 * @param WP_Post $post       Post.
 	 * @return void
 	 */
-	public function on_status( $new, $old, $post ) {
-		if ( $new !== $old && in_array( $post->post_type, array( PostTypes::RELEASE, PostTypes::PRODUCT ), true ) ) {
+	public function on_status( $new_status, $old_status, $post ) {
+		if ( $new_status !== $old_status && in_array( $post->post_type, array( PostTypes::RELEASE, PostTypes::PRODUCT ), true ) ) {
 			$this->products->reset();
 			$this->changelog->flush();
 		}

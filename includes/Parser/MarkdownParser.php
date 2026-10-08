@@ -61,7 +61,8 @@ class MarkdownParser extends AbstractLineParser {
 			return array( 'Unreleased', '' );
 		}
 
-		// "[1.2.0](url) (date)", "[1.2.0] - date", "Version 1.2.0 - date", "v1.2.0".
+		// Version headings, for example a linked version with a date, a bracketed version and a date,
+		// "Version 1.2.0 - date" or a bare "v1.2.0".
 		if ( preg_match( '/^(?:version\s+|release\s+)?\[?' . self::VERSION . '\]?(?:\([^)\s]*:\/\/[^)]*\))?(.*)$/i', $text, $m ) ) {
 			return array( $m[1], $m[2] );
 		}

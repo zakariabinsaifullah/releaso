@@ -80,7 +80,7 @@ class Block {
 				) . ';',
 				'before'
 			);
-			wp_set_script_translations( $type->editor_script_handles[0], 'releaso', RELEASO_DIR . '/languages' );
+			wp_set_script_translations( $type->editor_script_handles[0], 'releaso' );
 		}
 	}
 

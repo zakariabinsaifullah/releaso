@@ -80,11 +80,11 @@ final class Product {
 	 * A source setting.
 	 *
 	 * @param string $key     Key.
-	 * @param mixed  $default Fallback.
+	 * @param mixed  $fallback Fallback.
 	 * @return mixed
 	 */
-	public function get( $key, $default = '' ) {
-		return $this->config[ $key ] ?? $default;
+	public function get( $key, $fallback = '' ) {
+		return $this->config[ $key ] ?? $fallback;
 	}
 
 	/**

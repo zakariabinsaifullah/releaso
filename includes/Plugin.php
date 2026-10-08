@@ -113,8 +113,6 @@ final class Plugin {
 		$this->changelog = new ChangelogService( $this->sources, $this->products, $this->releases, $this->settings );
 		$this->renderer  = new Renderer( $this->products, $this->changelog, $this->settings );
 
-		add_action( 'init', array( $this, 'load_textdomain' ), 0 );
-
 		( new Installer() )->register();
 		( new PostTypes() )->register();
 		( new Lifecycle( $this->products, $this->changelog, $this->sources ) )->register();
@@ -138,15 +136,6 @@ final class Plugin {
 		 * @param Plugin $plugin Plugin.
 		 */
 		do_action( 'releaso_loaded', $this );
-	}
-
-	/**
-	 * Loads translations.
-	 *
-	 * @return void
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain( 'releaso', false, dirname( plugin_basename( RELEASO_FILE ) ) . '/languages' );
 	}
 
 	/**

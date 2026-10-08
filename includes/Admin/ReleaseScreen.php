@@ -14,6 +14,7 @@ use Releaso\Model\Release;
 use Releaso\Parser\ReadmeParser;
 use Releaso\Plugin;
 use Releaso\Support\ChangeTypes;
+use Releaso\Support\Posts;
 use WP_Post;
 use WP_Query;
 
@@ -81,14 +82,12 @@ class ReleaseScreen {
 	 * @return array<int,string>
 	 */
 	private function product_options() {
-		$posts = get_posts(
+		$posts = Posts::all(
 			array(
-				'post_type'      => PostTypes::PRODUCT,
-				'post_status'    => array( 'publish', 'draft', 'private', 'pending' ),
-				'posts_per_page' => 200,
-				'orderby'        => 'title',
-				'order'          => 'ASC',
-				'no_found_rows'  => true,
+				'post_type'   => PostTypes::PRODUCT,
+				'post_status' => array( 'publish', 'draft', 'private', 'pending' ),
+				'orderby'     => 'title',
+				'order'       => 'ASC',
 			)
 		);
 		return wp_list_pluck( $posts, 'post_title', 'ID' );

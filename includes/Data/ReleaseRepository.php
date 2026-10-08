@@ -12,6 +12,7 @@ use Releaso\Model\Change;
 use Releaso\Model\Release;
 use Releaso\Model\ReleaseCollection;
 use Releaso\Support\ChangeTypes;
+use Releaso\Support\Posts;
 use WP_Post;
 
 /**
@@ -32,14 +33,12 @@ class ReleaseRepository {
 	 * @return ReleaseCollection
 	 */
 	public function for_product( $product_id ) {
-		$posts = get_posts(
+		$posts = Posts::all(
 			array(
 				'post_type'              => PostTypes::RELEASE,
 				'post_status'            => 'publish',
-				'posts_per_page'         => 500,
 				'meta_key'               => self::META_PRODUCT, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				'meta_value'             => (int) $product_id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
-				'no_found_rows'          => true,
 				'update_post_term_cache' => false,
 			)
 		);

@@ -8,6 +8,7 @@
 namespace Releaso\Data;
 
 use Releaso\Model\Product;
+use Releaso\Support\Posts;
 use WP_Post;
 
 /**
@@ -33,16 +34,14 @@ class ProductRepository {
 	 */
 	public function all() {
 		if ( null === $this->published ) {
-			$posts = get_posts(
+			$posts = Posts::all(
 				array(
 					'post_type'              => PostTypes::PRODUCT,
 					'post_status'            => 'publish',
-					'posts_per_page'         => 200,
 					'orderby'                => array(
 						'menu_order' => 'ASC',
 						'title'      => 'ASC',
 					),
-					'no_found_rows'          => true,
 					'update_post_term_cache' => false,
 				)
 			);

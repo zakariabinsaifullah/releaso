@@ -121,7 +121,8 @@ class Classifier {
 			$text = trim( $m[2] );
 		}
 
-		// "Added:", "Added (Pro):", "**Fixed:**", "[Fixed]", "FIX -", "feat(blocks):", "Fixed —".
+		// A type word that leads the line, such as Added, Added (Pro), bold Fixed, bracketed Fixed,
+		// FIX with a dash, a conventional commit scope like feat(blocks), or Fixed with an em dash.
 		$prefix = '/^(?:\*\*|__)?\[?([\p{L}]+)(?:\s*\(([^)]{1,40})\))?\]?(?:\*\*|__)?(?:\s*:|\s+[-–—]|(?<=\])\s)\s*(?:\*\*|__)?\s*(.+)$/u';
 		if ( preg_match( $prefix, $text, $m ) ) {
 			$found = $this->type_for( $m[1] );

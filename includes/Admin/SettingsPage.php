@@ -457,7 +457,7 @@ class SettingsPage {
 					</li>
 					<li><?php esc_html_e( 'Insert the Releaso Changelog block, or paste the shortcode:', 'releaso' ); ?>
 						<div class="releaso-copy">
-							<input type="text" class="widefat code" readonly value="[releaso products=&quot;your-product&quot;]" onfocus="this.select()" aria-label="<?php esc_attr_e( 'Shortcode', 'releaso' ); ?>">
+							<input type="text" class="widefat code" readonly value="[releaso products=&quot;your-product&quot;]" data-releaso-select aria-label="<?php esc_attr_e( 'Shortcode', 'releaso' ); ?>">
 							<button type="button" class="button releaso-copy__button" data-releaso-copy><?php esc_html_e( 'Copy', 'releaso' ); ?></button>
 						</div>
 					</li>
@@ -520,11 +520,11 @@ class SettingsPage {
 	/**
 	 * Settings changed: drop cached changelogs; when parsing changed, re-sync in the background.
 	 *
-	 * @param mixed $old Old value.
-	 * @param mixed $new New value.
+	 * @param mixed $old_value Old value.
+	 * @param mixed $new_value New value.
 	 * @return void
 	 */
-	public function updated( $old, $new ) {
+	public function updated( $old_value, $new_value ) {
 		$this->settings->reset();
 		ChangeTypes::reset();
 		$this->changelog->flush();
@@ -536,7 +536,7 @@ class SettingsPage {
 			}
 			return wp_json_encode( $out );
 		};
-		if ( ! empty( $old['include_unreleased'] ) !== ! empty( $new['include_unreleased'] ) || $words( $old['types'] ?? array() ) !== $words( $new['types'] ?? array() ) ) {
+		if ( ! empty( $old_value['include_unreleased'] ) !== ! empty( $new_value['include_unreleased'] ) || $words( $old_value['types'] ?? array() ) !== $words( $new_value['types'] ?? array() ) ) {
 			Scheduler::resync();
 		}
 	}

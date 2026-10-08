@@ -1,15 +1,21 @@
 /**
  * Releaso front-end styles.
  *
- * Everything is a custom property, so a theme can restyle it without overrides:
- *   .releaso { --releaso-accent: #5a18e6; --releaso-font-display: inherit; --releaso-bg: #fff; }
- * Type colours (--releaso-new, --releaso-fixed …) and the accent from Releaso → Settings are
- * printed inline, together with the per-type rules, so custom types get styled too.
+ * Everything is a custom property, so a theme can restyle it without
+ * overrides, for example:
  *
- * Element colours (set per block in the editor's Color panel, or by a theme) are optional and
- * fall back to the defaults: --releaso-product-color, --releaso-version-color,
- * --releaso-date-color, --releaso-title-color, --releaso-text-color, --releaso-latest-bg,
- * --releaso-tag-bg. --releaso-card and --releaso-line set card backgrounds and borders.
+ *   .releaso { --releaso-accent: #5a18e6; --releaso-bg: #fff; }
+ *
+ * Type colours (--releaso-new, --releaso-fixed …) and the accent from
+ * Releaso → Settings are printed inline, together with the per-type rules,
+ * so custom types get styled too.
+ *
+ * Element colours (set per block in the editor's Color panel, or by a theme)
+ * are optional and fall back to the defaults:
+ *   --releaso-product-color, --releaso-version-color, --releaso-date-color,
+ *   --releaso-title-color, --releaso-text-color, --releaso-latest-bg,
+ *   --releaso-tag-bg.
+ * --releaso-card and --releaso-line set card backgrounds and borders.
  */
 
 .releaso {
@@ -44,7 +50,7 @@
 	width: 1px;
 	height: 1px;
 	overflow: hidden;
-	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
 	white-space: nowrap;
 }
 
@@ -53,7 +59,10 @@
 	outline-offset: 3px;
 }
 
-/* chosen colours: when a block sets one, it wins over theme link and heading colours ---------- */
+/*
+ * Chosen colours: when a block sets one, it wins over theme link and heading
+ * colours.
+ */
 
 .releaso.releaso--has-product-color .releaso__product {
 	color: var(--releaso-product-color);
@@ -79,7 +88,7 @@
 	color: var(--releaso-text-color);
 }
 
-/* bar: tabs, filters, search ------------------------------------------------------------------ */
+/* bar: tabs, filters, search ----------------------------------------------- */
 
 .releaso__bar {
 	position: sticky;
@@ -239,7 +248,7 @@
 	outline: 3px solid color-mix(in srgb, var(--releaso-accent) 15%, transparent);
 }
 
-/* panels --------------------------------------------------------------------------------------- */
+/* panels ------------------------------------------------------------------- */
 
 .releaso.is-js .releaso__panel[hidden] {
 	display: none;
@@ -290,7 +299,7 @@
 	text-underline-offset: 3px;
 }
 
-/* timeline ------------------------------------------------------------------------------------- */
+/* timeline ----------------------------------------------------------------- */
 
 .releaso__timeline {
 	position: relative;
@@ -341,8 +350,14 @@
 }
 
 @keyframes releaso-pulse {
-	0% { box-shadow: 0 0 0 4px var(--releaso-bg), 0 0 0 4px color-mix(in srgb, var(--releaso-accent) 40%, transparent); }
-	100% { box-shadow: 0 0 0 4px var(--releaso-bg), 0 0 0 14px transparent; }
+
+	0% {
+		box-shadow: 0 0 0 4px var(--releaso-bg), 0 0 0 4px color-mix(in srgb, var(--releaso-accent) 40%, transparent);
+	}
+
+	100% {
+		box-shadow: 0 0 0 4px var(--releaso-bg), 0 0 0 14px transparent;
+	}
 }
 
 .releaso.is-js .releaso__release.is-older:not(.is-shown):not(.is-hit) {
@@ -402,7 +417,9 @@
 }
 
 @keyframes releaso-flash {
-	0%, 30% {
+
+	0%,
+	30% {
 		box-shadow: 0 0 0 4px color-mix(in srgb, var(--releaso-accent) 25%, transparent);
 	}
 }
@@ -607,7 +624,7 @@
 	color: inherit;
 }
 
-/* more, empty ---------------------------------------------------------------------------------- */
+/* more, empty -------------------------------------------------------------- */
 
 .releaso__more-wrap {
 	display: flex;
@@ -650,7 +667,7 @@
 	text-align: center;
 }
 
-/* notes, release links ------------------------------------------------------------------------ */
+/* notes, release links ----------------------------------------------------- */
 
 .releaso__notes {
 	margin: 0 0 16px;
@@ -679,7 +696,7 @@
 	text-underline-offset: 3px;
 }
 
-/* compact layout ------------------------------------------------------------------------------- */
+/* compact layout ----------------------------------------------------------- */
 
 .releaso__list {
 	display: flex;
@@ -741,9 +758,10 @@
 	margin-top: 10px;
 }
 
-/* small screens -------------------------------------------------------------------------------- */
+/* small screens ------------------------------------------------------------ */
 
 @media (max-width: 760px) {
+
 	.releaso__bar {
 		position: static;
 		flex-direction: column;
@@ -819,6 +837,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
 	.releaso *,
 	.releaso *::before {
 		animation: none !important;

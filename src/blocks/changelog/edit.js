@@ -5,11 +5,9 @@ import { __, sprintf } from '@wordpress/i18n';
 import {
 	useBlockProps,
 	InspectorControls,
-	__experimentalColorGradientSettingsDropdown as ColorGradientSettingsDropdown,
-	__experimentalUseMultipleOriginColorsAndGradients as useMultipleOriginColorsAndGradients,
+	PanelColorSettings,
 } from '@wordpress/block-editor';
 import {
-	__experimentalToolsPanel as ToolsPanel,
 	PanelBody,
 	CheckboxControl,
 	RangeControl,
@@ -22,11 +20,16 @@ import {
 	Placeholder,
 	FormTokenField,
 } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import ServerSideRender from '@wordpress/server-side-render';
 
-const config = window.releasoBlock || { layouts: {}, types: {}, typeColors: {}, perPage: 6 };
+const config = window.releasoBlock || {
+	layouts: {},
+	types: {},
+	typeColors: {},
+	perPage: 6,
+};
 
 /**
  * Parts of the changelog that take their own colour (keys match Renderer::color_elements()).
@@ -60,7 +63,10 @@ function useProducts() {
 			.catch( ( e ) => {
 				if ( live ) {
 					setProducts( [] );
-					setError( e?.message || __( 'Products could not be loaded.', 'releaso' ) );
+					setError(
+						e?.message ||
+							__( 'Products could not be loaded.', 'releaso' )
+					);
 				}
 			} );
 		return () => {
@@ -71,78 +77,74 @@ function useProducts() {
 	return { products, error };
 }
 
-export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { products: chosen, layout, perPage, limit, types, showFilters, showSearch, showHeader, expanded, colors, typeColors } = attributes;
+export default function Edit( { attributes, setAttributes } ) {
+	const {
+		products: chosen,
+		layout,
+		perPage,
+		limit,
+		types,
+		showFilters,
+		showSearch,
+		showHeader,
+		expanded,
+		colors,
+		typeColors,
+	} = attributes;
 	const { products, error } = useProducts();
 	const blockProps = useBlockProps();
-	const colorSettings = useMultipleOriginColorsAndGradients();
+	// Latest colour objects, so several changes in one tick (such as "Reset all") build on each other.
+	const latestColors = useRef( { colors, typeColors } );
+	latestColors.current = { colors, typeColors };
 
 	// Sets or clears one key of an object attribute (colors, typeColors).
 	const setColor = ( attribute, key, value ) => {
-		const next = { ...attributes[ attribute ] };
+		const next = { ...latestColors.current[ attribute ] };
 		if ( value ) {
 			next[ key ] = value;
 		} else {
 			delete next[ key ];
 		}
+		latestColors.current = { ...latestColors.current, [ attribute ]: next };
 		setAttributes( { [ attribute ]: next } );
 	};
 
 	const colorItem = ( attribute, key, label, current ) => ( {
 		label,
-		colorValue: current[ key ],
-		onColorChange: ( value ) => setColor( attribute, key, value ),
-		resetAllFilter: ( all ) => ( { ...all, [ attribute ]: {} } ),
-		isShownByDefault: true,
-		enableAlpha: true,
-		clearable: true,
+		value: current[ key ],
+		onChange: ( value ) => setColor( attribute, key, value ),
 	} );
 
 	const toggleProduct = ( slug ) =>
 		setAttributes( {
-			products: chosen.includes( slug ) ? chosen.filter( ( p ) => p !== slug ) : [ ...chosen, slug ],
+			products: chosen.includes( slug )
+				? chosen.filter( ( p ) => p !== slug )
+				: [ ...chosen, slug ],
 		} );
 
 	const typeLabels = config.types || {};
-	const typeKeysByLabel = Object.fromEntries( Object.entries( typeLabels ).map( ( [ key, label ] ) => [ label, key ] ) );
+	const typeKeysByLabel = Object.fromEntries(
+		Object.entries( typeLabels ).map( ( [ key, label ] ) => [ label, key ] )
+	);
 
 	const colorControls = (
-		<>
-			<InspectorControls group="color">
-				<ColorGradientSettingsDropdown
-					__experimentalIsRenderedInSidebar
-					settings={ ELEMENTS.map( ( [ key, label ] ) => colorItem( 'colors', key, label, colors ) ) }
-					panelId={ clientId }
-					{ ...colorSettings }
-					gradients={ [] }
-					disableCustomGradients
-				/>
-			</InspectorControls>
-			<InspectorControls group="styles">
-				<ToolsPanel
-					label={ __( 'Change type colors', 'releaso' ) }
-					panelId={ clientId }
-					resetAll={ () => setAttributes( { typeColors: {} } ) }
-					className="color-block-support-panel"
-					hasInnerWrapper
-					__experimentalFirstVisibleItemClass="first"
-					__experimentalLastVisibleItemClass="last"
-				>
-					<div className="color-block-support-panel__inner-wrapper">
-						<ColorGradientSettingsDropdown
-							__experimentalIsRenderedInSidebar
-							settings={ Object.entries( typeLabels ).map( ( [ key, label ] ) =>
-								colorItem( 'typeColors', key, label, typeColors )
-							) }
-							panelId={ clientId }
-							{ ...colorSettings }
-							gradients={ [] }
-							disableCustomGradients
-						/>
-					</div>
-				</ToolsPanel>
-			</InspectorControls>
-		</>
+		<InspectorControls group="styles">
+			<PanelColorSettings
+				title={ __( 'Changelog colors', 'releaso' ) }
+				enableAlpha
+				colorSettings={ ELEMENTS.map( ( [ key, label ] ) =>
+					colorItem( 'colors', key, label, colors )
+				) }
+			/>
+			<PanelColorSettings
+				title={ __( 'Change type colors', 'releaso' ) }
+				enableAlpha
+				colorSettings={ Object.entries( typeLabels ).map(
+					( [ key, label ] ) =>
+						colorItem( 'typeColors', key, label, typeColors )
+				) }
+			/>
+		</InspectorControls>
 	);
 
 	const inspector = (
@@ -157,7 +159,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				{ products?.length === 0 && ! error && (
 					<Notice status="info" isDismissible={ false }>
 						{ __( 'No products yet.', 'releaso' ) }{ ' ' }
-						<a href={ config.addProduct } target="_blank" rel="noreferrer">
+						<a
+							href={ config.addProduct }
+							target="_blank"
+							rel="noreferrer"
+						>
 							{ __( 'Add one', 'releaso' ) }
 						</a>
 					</Notice>
@@ -169,17 +175,29 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						label={ product.name }
 						help={
 							product.latest
-								? /* translators: 1: version, 2: number of releases */
-								  sprintf( __( 'v%1$s · %2$d releases', 'releaso' ), product.latest, product.releases )
+								? sprintf(
+										/* translators: 1: version, 2: number of releases */
+										__(
+											'v%1$s · %2$d releases',
+											'releaso'
+										),
+										product.latest,
+										product.releases
+									)
 								: __( 'No releases yet', 'releaso' )
 						}
-						checked={ ! chosen.length || chosen.includes( product.slug ) }
+						checked={
+							! chosen.length || chosen.includes( product.slug )
+						}
 						onChange={ () => toggleProduct( product.slug ) }
 					/>
 				) ) }
 				{ products?.length > 1 && (
 					<p className="components-base-control__help">
-						{ __( 'None ticked shows every product. Several show as tabs.', 'releaso' ) }
+						{ __(
+							'None ticked shows every product. Several show as tabs.',
+							'releaso'
+						) }
 					</p>
 				) }
 			</PanelBody>
@@ -191,8 +209,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					label={ __( 'Layout', 'releaso' ) }
 					value={ layout }
 					options={ [
-						{ value: '', label: __( 'Default (from settings)', 'releaso' ) },
-						...Object.entries( config.layouts ).map( ( [ value, label ] ) => ( { value, label } ) ),
+						{
+							value: '',
+							label: __( 'Default (from settings)', 'releaso' ),
+						},
+						...Object.entries( config.layouts ).map(
+							( [ value, label ] ) => ( { value, label } )
+						),
 					] }
 					onChange={ ( value ) => setAttributes( { layout: value } ) }
 				/>
@@ -203,14 +226,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					min={ 1 }
 					max={ 50 }
 					value={ perPage || config.perPage }
-					onChange={ ( value ) => setAttributes( { perPage: value || 0 } ) }
+					onChange={ ( value ) =>
+						setAttributes( { perPage: value || 0 } )
+					}
 					disabled={ expanded }
 				/>
 				<ToggleControl
 					__nextHasNoMarginBottom
 					label={ __( 'Show every release at once', 'releaso' ) }
 					checked={ expanded }
-					onChange={ ( value ) => setAttributes( { expanded: value } ) }
+					onChange={ ( value ) =>
+						setAttributes( { expanded: value } )
+					}
 				/>
 				<RangeControl
 					__nextHasNoMarginBottom
@@ -220,7 +247,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					min={ 0 }
 					max={ 100 }
 					value={ limit }
-					onChange={ ( value ) => setAttributes( { limit: value || 0 } ) }
+					onChange={ ( value ) =>
+						setAttributes( { limit: value || 0 } )
+					}
 				/>
 				<FormTokenField
 					__nextHasNoMarginBottom
@@ -230,39 +259,64 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					suggestions={ Object.values( typeLabels ) }
 					onChange={ ( tokens ) =>
 						setAttributes( {
-							types: tokens.map( ( token ) => typeKeysByLabel[ token ] ).filter( Boolean ),
+							types: tokens
+								.map( ( token ) => typeKeysByLabel[ token ] )
+								.filter( Boolean ),
 						} )
 					}
 					__experimentalExpandOnFocus
 					__experimentalShowHowTo={ false }
 				/>
-				<p className="components-base-control__help">{ __( 'Empty shows every type.', 'releaso' ) }</p>
+				<p className="components-base-control__help">
+					{ __( 'Empty shows every type.', 'releaso' ) }
+				</p>
 			</PanelBody>
 
-			<PanelBody title={ __( 'Toolbar', 'releaso' ) } initialOpen={ false }>
+			<PanelBody
+				title={ __( 'Toolbar', 'releaso' ) }
+				initialOpen={ false }
+			>
 				<ToggleControl
 					__nextHasNoMarginBottom
 					label={ __( 'Product name and stats', 'releaso' ) }
 					checked={ showHeader }
-					onChange={ ( value ) => setAttributes( { showHeader: value } ) }
+					onChange={ ( value ) =>
+						setAttributes( { showHeader: value } )
+					}
 				/>
 				<ToggleControl
 					__nextHasNoMarginBottom
 					label={ __( 'Type filters', 'releaso' ) }
 					checked={ showFilters }
-					onChange={ ( value ) => setAttributes( { showFilters: value } ) }
+					onChange={ ( value ) =>
+						setAttributes( { showFilters: value } )
+					}
 				/>
 				<ToggleControl
 					__nextHasNoMarginBottom
 					label={ __( 'Search', 'releaso' ) }
 					checked={ showSearch }
-					onChange={ ( value ) => setAttributes( { showSearch: value } ) }
+					onChange={ ( value ) =>
+						setAttributes( { showSearch: value } )
+					}
 				/>
 			</PanelBody>
 
-			<PanelBody title={ __( 'Releases', 'releaso' ) } initialOpen={ false }>
-				<p>{ __( 'Releases come from each product\'s source, plus the ones you write.', 'releaso' ) }</p>
-				<Button variant="secondary" href={ config.addRelease } target="_blank">
+			<PanelBody
+				title={ __( 'Releases', 'releaso' ) }
+				initialOpen={ false }
+			>
+				<p>
+					{ __(
+						"Releases come from each product's source, plus the ones you write.",
+						'releaso'
+					) }
+				</p>
+				<Button
+					variant="secondary"
+					href={ config.addRelease }
+					target="_blank"
+				>
 					{ __( 'Write a release', 'releaso' ) }
 				</Button>
 			</PanelBody>
@@ -274,8 +328,19 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			<div { ...blockProps }>
 				{ inspector }
 				{ colorControls }
-				<Placeholder icon="megaphone" label={ __( 'Changelog', 'releaso' ) } instructions={ __( 'Add a product to show its changelog: WordPress.org, GitHub, a readme or releases you write.', 'releaso' ) }>
-					<Button variant="primary" href={ config.addProduct } target="_blank">
+				<Placeholder
+					icon="megaphone"
+					label={ __( 'Changelog', 'releaso' ) }
+					instructions={ __(
+						'Add a product to show its changelog: WordPress.org, GitHub, a readme or releases you write.',
+						'releaso'
+					) }
+				>
+					<Button
+						variant="primary"
+						href={ config.addProduct }
+						target="_blank"
+					>
 						{ __( 'Add a product', 'releaso' ) }
 					</Button>
 				</Placeholder>
@@ -288,7 +353,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			{ inspector }
 			{ colorControls }
 			<Disabled>
-				<ServerSideRender block="releaso/changelog" attributes={ attributes } skipBlockSupportAttributes />
+				<ServerSideRender
+					block="releaso/changelog"
+					attributes={ attributes }
+					skipBlockSupportAttributes
+				/>
 			</Disabled>
 		</div>
 	);

@@ -244,7 +244,7 @@ class ProductScreen {
 		?>
 		<p><?php esc_html_e( 'Add the Releaso Changelog block to any page, or paste this shortcode:', 'releaso' ); ?></p>
 		<div class="releaso-copy">
-			<input type="text" class="widefat code" readonly value="<?php echo esc_attr( '[releaso products="' . $slug . '"]' ); ?>" onfocus="this.select()">
+			<input type="text" class="widefat code" readonly value="<?php echo esc_attr( '[releaso products="' . $slug . '"]' ); ?>" data-releaso-select>
 			<button type="button" class="button releaso-copy__button" data-releaso-copy><?php esc_html_e( 'Copy', 'releaso' ); ?></button>
 		</div>
 		<p class="description"><?php esc_html_e( 'The product slug (in the shortcode) comes from the name; change it in Quick Edit.', 'releaso' ); ?></p>
